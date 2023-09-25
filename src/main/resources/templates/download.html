@@ -10,7 +10,27 @@
     </body>
     <head>
         <script type="application/javascript">
-            // 이곳에 코드를 작성하십시오.
+            document.addEventListener("DOMContentLoaded", function () {
+            // 파일 목록을 불러오는 REST 요청
+            fetch('/api/getFileList') // 실제 REST 엔드포인트로 변경해야 함
+                .then(response => response.json())
+                .then(data => {
+                    const fileListElement = document.getElementById("file_list");
+
+                    // 파일 목록을 순회하면서 다운로드 링크를 생성하여 페이지에 추가
+                    data.forEach(file => {
+                        const listItem = document.createElement("li");
+                        const downloadLink = document.createElement("a");
+                        downloadLink.href = `/download/${file.filename}`; // 실제 다운로드 경로로 변경
+                        downloadLink.textContent = file.filename;
+                        listItem.appendChild(downloadLink);
+                        fileListElement.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    console.error("파일 목록을 불러오는 중 오류 발생:", error);
+                });
+        });
         </script>
     </head>
 </html>
